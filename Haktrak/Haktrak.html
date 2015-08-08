@@ -1,16 +1,83 @@
 <head>
   <title>Haktrak</title>
+  <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 </head>
 
-<body>
-  <h1>Welcome to Meteor!</h1>
-
-  {{> hello}}
-</body>
-
-<template name="hello">
-  <button>Click Me</button>
-  <p>You've pressed the button {{counter}} times.</p>
+<template name="layout1">
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <ul class="nav navbar-nav navbar-left">
+        <li role="presentation"><a href="{{pathFor route='quests'}}">Quests</a></li>
+        <li role="presentation"><a href="{{pathFor route='stats'}}">Stats</a></li>
+        <li role="presentation"><a href="">Sign-Off</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li role="presentation"><a href="{{pathFor route= 'home'}}"><span class="glyphicon glyphicon-home"></span></a></li>
+      </ul>  
+    </div>  
+  </nav>
+  <div class="mainBody">
+    {{> yield}}
+  </div>
+  
+  <nav class="navbar navbar-default mainFooter">
+    <ul class="nav navbar-nav">
+      <li role="presentation"><a>HakTrak</a></li>
+    </ul>
+  </nav>
 </template>
 
-<script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+<template name="quests">
+  <div class = "container-fluid">
+    {{#each lines}}
+      {{> line}}
+    {{/each}}
+  </div>
+</template>
+
+<template name="stats">
+  <H1 class="h1">Progress</H1>
+  
+  <br>
+  <br>
+  <br>
+  
+  <h3 class="h3">Team One</h3>
+  
+  <br>
+  
+  <div class="progress">
+    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 45%">
+      1080
+    </div>
+  </div>
+  
+  <br>
+  <br>
+  <br>
+  
+  <h3 class="h3">Team Two</h3>
+  
+  <br>
+  
+  <div class="progress">
+    <div class="progress-bar progress-bar-danger progress-bar-striped active" role="progressbar" aria-valuenow="67" aria-valuemin="0" aria-valuemax="100" style="width: 67%">
+      1608
+    </div>
+  </div>
+</template>
+
+<template name="line">
+  <div class = "row spacing">
+    <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="button"> points: {{value}} Name: {{text}} </button>
+  </div>
+</template>
+
+<template name="home">
+  <div class="container-fluid">
+    <div class = "row spacing">
+      <H1 class="h1">Welcome</H1>
+    </div>
+  </div>
+</template>

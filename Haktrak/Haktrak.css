@@ -1,22 +1,46 @@
 /* CSS declarations go here */
 
+/* Used to space quests. */
 .spacing {
   margin: 10px;
 }
 
+/* Add padding to large buttons. */
 .btn-lg {
   padding: 5px;
 }
 
-.mainBody {
+/* Fills window. */
+html, body {
+  height: 100%;
+  max-width: 100%;
+}
+
+/* Container for the page. */
+.mainContainer {
   position: relative;
-  height: 100vh;
-  min-height: 120px;
-  width: 100%;
+  min-height: 100%;
 }
+/* Sets CSS for the main body of a page. */
+.mainBody {
+  height: 100%;
+  padding-bottom: 50px;
+}
+/* Sets footer at the bottom. */
 .mainFooter {
+  height: 50px;
+  width: 100%;
   margin-bottom: 0px;
+  position: absolute;
+  bottom: 1px;
 }
+
+/* Centers text. */
 .center {
   text-align: center;
+}
+
+/* Removes line of modal footer. */
+.modal-footer {
+  border: none;
 }

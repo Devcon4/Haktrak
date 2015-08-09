@@ -1,41 +1,71 @@
+<!-- Header. --> 
 <head>
-  <title>Haktrak</title>
-  <script src='https://cdn.firebase.com/js/client/2.2.1/firebase.js'></script>
+  <title>HackUstate - Haktrak</title>
+  <!--Jquery CDN. -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 </head>
 
+<!-- Layout1: basic layout. set as layoutTemplate. -->
 <template name="layout1">
-  <nav class="navbar navbar-default">
-    <div class="container-fluid">
-      <ul class="nav navbar-nav navbar-left">
-        <li role="presentation"><a href="{{pathFor route='quests'}}">Quests</a></li>
-        <li role="presentation"><a href="{{pathFor route='stats'}}">Stats</a></li>
-        <li role="presentation"><a href="">Sign-Off</a></li>
+  <div class="mainContainer">
+    <!-- Top navbar. Navigation and modal. -->
+    <nav class="navbar navbar-default mainHeader">
+      <div class="container-fluid">
+        <ul class="nav navbar-nav navbar-left">
+          <li role="presentation"><a href="{{pathFor route='quests'}}">Quests</a></li>
+          <li role="presentation"><a href="{{pathFor route='stats'}}">Stats</a></li>
+          <!-- activates a modal. checkOffModal. -->
+          <li role="presentation"><button class="btn navbar-btn modalBtn" data-modal-template="checkOffModal" data-toggle="modal" data-target="#myModal">Check-Off</button></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <!-- activates a modal. loginModal. -->
+          <li role="presentation"><button class="btn navbar-btn modalBtn" data-modal-template="loginModal" data-toggle="modal" data-target="#myModal">Sign-In</button></li>
+          <li role="presentation"><a href="{{pathFor route= 'home'}}"><span class="glyphicon glyphicon-home"></span></a></li>
+        </ul>  
+      </div>  
+    </nav>
+
+    <!-- core of the page. changes.-->
+    <div class="mainBody">
+      <!-- gets this routes body. -->
+      {{> yield}}
+      <!-- Hidden until a modal is needed. -->
+      {{> modal}}
+
+      <!-- fills page. -->
+      <div class="push"></div>
+    </div>
+
+    <!-- Footer. -->
+    <nav class="navbar navbar-default /navbar-static-bottom mainFooter">
+      <ul class="nav navbar-nav">
+        <li role="presentation"><a>HakTrak</a></li>
       </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li role="presentation"><a href="{{pathFor route= 'home'}}"><span class="glyphicon glyphicon-home"></span></a></li>
-      </ul>  
-    </div>  
-  </nav>
-  <div class="mainBody">
-    {{> yield}}
-  </div>
-  
-  <nav class="navbar navbar-default mainFooter">
-    <ul class="nav navbar-nav">
-      <li role="presentation"><a>HakTrak</a></li>
-    </ul>
-  </nav>
+      <!-- This isn't important right?
+      <ul class="nav navbar-right imgDiv">
+        <li role="presentation">
+          <a href="http://hackustate.org/" class="imgA">
+            <img alt="HackUstate" class=" navbar-brand img" src="HackUStateLogo-3%20Final2-01.png">
+          </a>
+        </li>
+      </ul>
+      -->
+    </nav>
+  </div>  
 </template>
 
+<!-- Quest page template. Shows quest checklist. -->
 <template name="quests">
   <div class = "container-fluid">
+    <!-- Foreach quest. -->
     {{#each lines}}
+      <!-- Make a button template. -->
       {{> line}}
     {{/each}}
   </div>
 </template>
 
+<!-- Stats page template. Shows realtime questing progress. -->
 <template name="stats">
   <H1 class="h1">Progress</H1>
   
@@ -68,12 +98,75 @@
   </div>
 </template>
 
+<!-- Modal for checking off progress. -->
+<template name="checkOffModal">
+  <div class="modal-header">
+    <h4 class="modal-title">Sign-Off</h4>
+  </div>
+  <div class="modal-body">
+    <p>Ask a member to sign off completed quests.</p>
+    <!-- This will need to be plugged in. -->
+    <div class="input-group">
+      <input type="text" class="form-control" placeholder="Key">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button">Authorize</button>
+      </span>
+    </div>
+  </div>
+</template>
+
+<!-- Modal for entering team ID. -->
+<template name="loginModal">
+  <div class="modal-header">
+    <h4 class="modal-title">Sign-In</h4>
+  </div>
+  <div class="modal-body">
+    <p>Enter your team ID.</p>
+    <div class="input-group">
+      <!-- This will need to be plugged in. -->
+      <input type="text" class="form-control" placeholder="ID">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button">Login</button>
+      </span>
+    </div>
+  </div>
+</template>
+
+<!-- Modal for push notifications. Needs to be wired to admin pannel. -->
+<template name="notifyModal">
+  <div class="modal-header">
+    <h4 class="modal-title">Notification!</h4>
+  </div>
+  <div class="modal-body">
+    <p>Dummy Notification! Lorem Ipsum.</p>
+  </div>
+</template>
+
+<!-- Modal template. Has core Modal structure. -->
+<template name="modal">  
+  {{#if activeModal}}
+    <div id="myModal" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <!-- Changes based on data-modal-template. -->
+          {{> Template.dynamic template=activeModal}}
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  {{/if}}
+</template>
+
+<!-- Quest template. adds a button for each quest. -->
 <template name="line">
   <div class = "row spacing">
     <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="button"> points: {{value}} Name: {{text}} </button>
   </div>
 </template>
 
+<!-- Landing page. Tutorial to HakTrak. -->
 <template name="home">
   <div class="container-fluid">
     <div class = "row spacing">

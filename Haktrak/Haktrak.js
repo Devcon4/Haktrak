@@ -1,20 +1,17 @@
 /* Dev spreadsheet info. */
 var spreadsheetID = "1hFsBm010k5GqV-4VfW4pEZLqARV-dyLbwnbBUQR1h1Q";
-var url = "https://spreadsheets.google.com/feeds/list/"+spreadsheetID+"/od6/public/values?alt=json";
+var thisUrl = "https://spreadsheets.google.com/feeds/list/"+spreadsheetID+"/od6/public/values?alt=json";
 
-/* dependency to make sure we got data from getData(). */
-var jsonDep = new Deps.Dependency();
-var jsonAr = [];
+QuestList = new Mongo.Collection('questList');
 
 /* Code to run on each client. */
 if (Meteor.isClient) {  
   
   /* Gets the quest data from the spreadsheet. */
   Template.quests.helpers({
-    lines: function(){ 
-      getData();
-      jsonDep.depend();
-      return jsonAr;
+    quests: function(){
+      Meteor.call("sheetsLoop", thisUrl);
+      return QuestList.find({}, { sort: {OrderID: 1 } });
     }
   });
   
@@ -34,20 +31,44 @@ if (Meteor.isClient) {
   });
 }
 
-/* Sets the jsonAr to the spreadsheet data. Messy: needs to be re-done. */
-function getData(){
-  $.getJSON(url, function(data) {
-    for(var i = 0; i < data.feed.entry.length; i++){
-      jsonAr[i] = {value: data.feed.entry[i].gsx$value.$t, text: data.feed.entry[i].gsx$text.$t};
+/* Global methods */
+Meteor.methods({
+  /* (fake)sync http.get */
+  getJSON: function(url){
+    var httpGetWrapper = Meteor.wrapAsync(HTTP.get);
+    var result = httpGetWrapper(url);
+    return result;
+  },
+  /* gets google sheet data and adds it to the QuestList. */
+  sheetsLoop: function(url) {
+    console.log("QuestList updated.");
+    QuestList.remove({});
+    var result = Meteor.call("getJSON", url);
+    for(var i = 0; i < result.data.feed.entry.length; i++){
+      try {
+        QuestList.insert({
+          id: result.data.feed.entry[i].gsx$id.$t,
+          value: result.data.feed.entry[i].gsx$value.$t,
+          text: result.data.feed.entry[i].gsx$text.$t,
+          isActive: 0,
+          isReg: 0
+        });
+      } catch(e) {
+        //console.log(e);
+      }
     }
-    jsonDep.changed();
-  });
-}
+  },
+  buttonToggled: function(userID){
+    var btn = QuestList.find({createdBy: userID});
+
+  }
+});
 
 /* Code to run on the server. */
 if (Meteor.isServer) {
   /* Startup only code. */
   Meteor.startup(function () {
+    QuestList._ensureIndex({text: 1}, {unique: true});
   });
 }
 
@@ -69,6 +90,12 @@ Router.route('/quests', {
 Router.route('/stats', {
   name: 'stats',
   template: 'stats'
+});
+
+/* Admin page */
+Router.route('/admin', {
+  name: 'admin',
+  template: 'admin'
 });
 
 /* Sets the layout Template to Layout1. */

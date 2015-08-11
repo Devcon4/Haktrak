@@ -44,3 +44,20 @@ html, body {
 .modal-footer {
   border: none;
 }
+
+.btn-usu {
+
+  background-color: rgb(112, 196, 188);
+}
+
+.btn-usu:hover {
+ background-color: rgb(104,104,104);
+}
+
+.btn-usu:active {
+  background-color: rgb(222, 255, 252);
+}
+
+.btn-usu:checked {
+  background-color: rgb(112, 196, 188);
+}

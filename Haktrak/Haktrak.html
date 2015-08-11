@@ -1,6 +1,6 @@
 <!-- Header. --> 
 <head>
-  <title>HackUstate - Haktrak</title>
+  <title>Haktrak</title>
   <!--Jquery CDN. -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 </head>
@@ -58,9 +58,9 @@
 <template name="quests">
   <div class = "container-fluid">
     <!-- Foreach quest. -->
-    {{#each lines}}
+    {{#each quests}}
       <!-- Make a button template. -->
-      {{> line}}
+      {{> quest}}
     {{/each}}
   </div>
 </template>
@@ -160,12 +160,23 @@
 </template>
 
 <!-- Quest template. adds a button for each quest. -->
-<template name="line">
+<template name="quest">
   <div class = "row spacing">
-    <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="button"> points: {{value}} Name: {{text}} </button>
+      <div class="input-group">
+        <button class="btn btn-primary form-control" data-toggle="button"> {{text}} </button>
+        <span class="input-group-btn">
+          <span class="btn btn-default"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span></span>
+        </span>
+      </div>
   </div>
 </template>
 
+<!-- Admin control panel page. -->
+<template name="admin">
+    <div class="alert alert-danger" role="alert">
+        <h1>Admin control panel</h1>
+    </div>
+</template>
 <!-- Landing page. Tutorial to HakTrak. -->
 <template name="home">
   <div class="container-fluid">
